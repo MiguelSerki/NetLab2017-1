@@ -8,9 +8,9 @@ namespace Practica2.Clases
 {
     class Ej20
     {
-        public static List<Pelicula> Peliculas;
-        public static List<Cliente> Clientes;
-        public static List<Alquiler> Alquileres;
+        public static List<Pelicula> Peliculas = new List<Pelicula>();
+        public static List<Cliente> Clientes = new List<Cliente>();
+        public static List<Alquiler> Alquileres = new List<Alquiler>();
 
 
         public void Menu()
@@ -56,27 +56,95 @@ namespace Practica2.Clases
 
         public void AgregarPelicula()
         {
+            Pelicula pelicula = new Pelicula();
 
+            pelicula.Id = Peliculas.Count() + 1;
+            Console.Write("Titulo: ");
+            pelicula.Titulo = Console.ReadLine();
+            Console.Write("Precio: ");
+            if (int.TryParse(Console.ReadLine(), out int precio))
+                pelicula.Precio = precio;
+            Console.Write("Plazo alquiler: ");
+            if (int.TryParse(Console.ReadLine(), out int plazo))
+                pelicula.PlazoAlquiler = plazo;
+
+            Peliculas.Add(pelicula);
         }
 
         public void AgregarCliente()
         {
+            Cliente cliente = new Cliente();
 
+            cliente.Id = Clientes.Count() + 1;
+            Console.Write("Nombre: ");
+            cliente.Nombre = Console.ReadLine();
+            Console.Write("Dirección: ");
+            cliente.Direccion = Console.ReadLine();
+            if (int.TryParse(Console.ReadLine(), out int telefono))
+                cliente.Telefono = telefono;
+
+            Clientes.Add(cliente);
         }
 
         public void AlquilarPelicula()
         {
+            Alquiler alquiler = new Alquiler();
+            alquiler.Id = Alquileres.Count() + 1;
+            Console.Write("Id de cliente: ");
+            if (int.TryParse(Console.ReadLine(), out int id))
+                foreach (var cliente in Clientes)
+                {
+                    if (cliente.Id == id)
+                    {
+                        alquiler.Cliente = cliente;
+                        break;
+                    }
+                }
+            Console.Write("Id de pelicula: ");
+            if (int.TryParse(Console.ReadLine(), out int peliculaId))
+                foreach (var pelicula in Peliculas)
+                {
+                    if (pelicula.Id == peliculaId)
+                    {
+                        alquiler.Pelicula = pelicula;
+                        break;
+                    }
+                }
+            if (DateTime.TryParse(Console.ReadLine(), out DateTime fecha))
+            {
+                alquiler.FechaAlquiler = fecha;
+                alquiler.FechaDevolucion = fecha.AddDays(alquiler.Pelicula.PlazoAlquiler);
+            }
+            alquiler.Importe = alquiler.Pelicula.Precio;
 
+            alquiler.Cliente.Alquilados.Add(alquiler);
+            Alquileres.Add(alquiler);
         }
 
         public void HistorialCLiente()
         {
 
+            Console.Write("Ingrese el id del cliente: ");
+            if (int.TryParse(Console.ReadLine(), out int id))
+                foreach (var c in Clientes)
+                {
+                    if (c.Id == id)
+                    {
+                        foreach (var a in c.Alquilados)
+                        {
+                            Console.WriteLine($"Alquiler Id: {a.Id}, Pelicula: {a.Pelicula.Titulo}, Entrega: {a.FechaDevolucion}, Importe: {a.Importe}");
+                        }
+                        break;
+                    }
+                }
         }
 
         public void ListaAlquileres()
         {
-
+            foreach (var alquiler in Alquileres)
+            {
+                Console.WriteLine($"Id: {alquiler}, Cliente: {alquiler.Cliente.Nombre}, Pelicula: {alquiler.Pelicula.Titulo}, Entrega: {alquiler.FechaDevolucion}, Importe: {alquiler.Importe}");
+            }
         }
 
         public void Ayuda()
@@ -90,7 +158,7 @@ namespace Practica2.Clases
         }
     }
 
-    class Pelicula
+    public class Pelicula
     {
         public int Id { get; set; }
         public string Titulo { get; set; }
@@ -99,17 +167,22 @@ namespace Practica2.Clases
         public bool Alquilado { get; set; }
     }
 
-    class Cliente
+    public class Cliente
     {
+        public Cliente()
+        {
+            Alquilados = new List<Alquiler>();
+        }
+
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Direccion { get; set; }
         public int Telefono { get; set; }
-        public List<Pelicula> Alquilados { get; set; }
+        public List<Alquiler> Alquilados { get; set; }
 
     }
 
-    class Alquiler
+    public class Alquiler
     {
         public int Id { get; set; }
         public Cliente Cliente { get; set; }

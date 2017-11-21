@@ -54,8 +54,12 @@ namespace Practica2
             */
 
             //////////EJERCICIO 20//////////
-            var ej = new Ej20();
+            /*var ej = new Ej20();
             ej.Menu();
+            */
+
+            //////////EJERCICIO 21//////////
+
 
             Console.Read();
         }
