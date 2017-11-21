@@ -7,7 +7,8 @@ La clave no debe ser visible exteriormente.
 
 Generar los metodos 
 
-EsFuerte() que devuelve un bool si la clave interna contiene al menos 1 numero y una mayuscula
+EsFuerte() que devuelve un bool si la clave interna contiene al menos 1 numero y una mayuscula o que
+la clave aun no se ha generado.
 
 Clave(bool generar) que devuelve la clave y toma un bool que indica si debe debe regenerar la clave con la longitud interna y luego devuelve la clave.
 

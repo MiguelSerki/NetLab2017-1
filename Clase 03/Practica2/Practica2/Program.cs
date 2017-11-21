@@ -49,7 +49,13 @@ namespace Practica2
             */
 
             //////////EJERCICIO 19//////////
+            /*var ej = new Empresa();
+            ej.InstanciarEj();
+            */
 
+            //////////EJERCICIO 20//////////
+            var ej = new Ej20();
+            ej.Menu();
 
             Console.Read();
         }

@@ -47,6 +47,7 @@
     <Compile Include="Clases\Ej16.cs" />
     <Compile Include="Clases\Ej18.cs" />
     <Compile Include="Clases\Ej19.cs" />
+    <Compile Include="Clases\Ej20.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
