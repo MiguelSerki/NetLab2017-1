@@ -15,9 +15,9 @@ namespace TP_POO.Classes
             decimal plus = 0;
             var yearsWorking = DateTime.Today.Year - this.EntryYear;
             if (yearsWorking >= 5 && yearsWorking <= 10)
-                plus = 2.5m * this.BasicSalary / 100;
+                plus = this.HoursWorked * 2.5m;
             else if (yearsWorking > 10)
-                plus = 5m * this.BasicSalary / 100;
+                plus = this.HoursWorked * 5m;
             //Sueldo básico + Horas trabajadas (precio hora * cantidad horas) + Plus por antigüedad
             return (this.BasicSalary + (this.PricePerHour * this.HoursWorked) + plus);
         }
