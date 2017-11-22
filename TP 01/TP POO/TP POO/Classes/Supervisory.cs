@@ -10,5 +10,10 @@ namespace TP_POO.Classes
     {
         public override decimal BasicSalary => 4000;
         public abstract decimal Commission { get; }
+
+        public override decimal CalculateSalary()
+        {
+            //Sueldo básico + Horas trabajadas (precio hora * cantidad horas) + Plus por antigüedad + Comisión
+        }
     }
 }

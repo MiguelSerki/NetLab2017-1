@@ -10,10 +10,12 @@ namespace TP_POO.Classes
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string EntryYear { get; set; }
+        public int EntryYear { get; set; }
         public int Identification { get; set; }
         public decimal PricePerHour { get; set; }
         public decimal HoursWorked { get; set; }
         public abstract decimal BasicSalary { get; }
+
+        public abstract decimal CalculateSalary();
     }
 }
