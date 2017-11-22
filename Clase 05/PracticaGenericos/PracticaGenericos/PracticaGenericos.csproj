@@ -45,6 +45,12 @@
     <Compile Include="Ejercicios\Ej23.cs" />
     <Compile Include="Ejercicios\Ej24.cs" />
     <Compile Include="Ejercicios\Ej25.cs" />
+    <Compile Include="Ejercicios\Ej26.cs" />
+    <Compile Include="Ejercicios\Ej27.cs" />
+    <Compile Include="Ejercicios\Ej28.cs" />
+    <Compile Include="Ejercicios\Ej29.cs" />
+    <Compile Include="Ejercicios\Ej30.cs" />
+    <Compile Include="Ejercicios\Ej31.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
