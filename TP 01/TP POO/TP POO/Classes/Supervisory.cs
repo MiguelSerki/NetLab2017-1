@@ -13,16 +13,19 @@ namespace TP_POO.Classes
 
         public override decimal CalculateSalary()
         {
-            decimal plus = 0;
+            decimal percentage = 0;
             var yearsWorking = DateTime.Today.Year - this.EntryYear;
             if (yearsWorking >= 5 && yearsWorking <= 10)
-                plus = this.HoursWorked * 2.5m;
+                percentage = 2.5m;
             else if (yearsWorking > 10)
-                plus = this.HoursWorked * 5m;
+                percentage = 5m;
 
-            //TO DO
+            var workedHours = this.PricePerHour * this.Hours;
+            var plus = percentage * workedHours / 100;
+            var comission = this.Commission * workedHours / 100;
+
             //Sueldo básico + Horas trabajadas (precio hora * cantidad horas) + Plus por antigüedad + Comisión
-            return (this.BasicSalary + (this.PricePerHour * this.HoursWorked) + plus);
+            return this.BasicSalary + workedHours + plus + comission;
         }
     }
 }

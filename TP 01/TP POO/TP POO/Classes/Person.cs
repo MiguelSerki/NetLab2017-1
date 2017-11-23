@@ -13,7 +13,7 @@ namespace TP_POO.Classes
         public int EntryYear { get; set; }
         public int Identification { get; set; }
         public decimal PricePerHour { get; set; }
-        public decimal HoursWorked { get; set; }
+        public decimal Hours { get; set; }
         public abstract decimal BasicSalary { get; }
 
         public abstract decimal CalculateSalary();
