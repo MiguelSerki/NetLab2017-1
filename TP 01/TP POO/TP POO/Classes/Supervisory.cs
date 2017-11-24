@@ -6,22 +6,37 @@ using System.Threading.Tasks;
 
 namespace TP_POO.Classes
 {
-    public abstract class Supervisory : Person
+    public abstract class Supervisory : IPerson
     {
-        public override decimal BasicSalary => 4000;
+        public decimal BasicSalary => 4000;
         public abstract decimal Commission { get; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public int EntryYear { get; set; }
+        public string Identification { get; set; }
+        public decimal PricePerHour { get; set; }
+        public int Hours { get; set; }
 
-        public override decimal CalculateSalary()
+        public decimal CalculateSalary()
         {
             decimal percentage = 0;
-            var yearsWorking = DateTime.Today.Year - this.EntryYear;
+            decimal plus;
+            var yearsWorking = 0;
+            if (this.EntryYear > 0)
+                yearsWorking = DateTime.Today.Year - this.EntryYear;
+
             if (yearsWorking >= 5 && yearsWorking <= 10)
                 percentage = 2.5m;
             else if (yearsWorking > 10)
                 percentage = 5m;
 
             var workedHours = this.PricePerHour * this.Hours;
-            var plus = percentage * workedHours / 100;
+
+            if (percentage > 0)
+                plus = percentage * workedHours / 100;
+            else
+                plus = 0;
+            
             var comission = this.Commission * workedHours / 100;
 
             //Sueldo básico + Horas trabajadas (precio hora * cantidad horas) + Plus por antigüedad + Comisión

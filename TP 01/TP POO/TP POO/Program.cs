@@ -98,25 +98,36 @@ namespace TP_POO
                 {
                     case "a":
                         Console.WriteLine("Ingrese DNI del empleado");
-                        if (int.TryParse(Console.ReadLine(), out int doc))
-                        {
-                            Person employee = sellers.Where(c => c.Identification == doc).FirstOrDefault();
-                            if (employee == null)
-                                employee = supervisors.Where(c => c.Identification == doc).FirstOrDefault();
+                        string doc = Console.ReadLine();
+                        IPerson employee;
 
-                            if (employee == null)
-                                Console.WriteLine($"{employee.Name} {employee.Surname}: {employee.CalculateSalary()}$");
-                            else
-                                Console.WriteLine("No existe el empleado");
+                        try
+                        {
+                            employee = sellers.Where(c => c.Identification.Equals(doc)).First();
                         }
+                        catch (Exception)
+                        {
+                            employee = supervisors.Where(c => c.Identification.Equals(doc)).FirstOrDefault();
+                        }
+                        
+
+                        try
+                        {
+                            Console.WriteLine($"{employee.Name} {employee.Surname}: {employee.CalculateSalary()}$");
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("No existe el empleado");
+                        }
+
                         break;
                     case "b":
                         Console.WriteLine("Supervisores:");
-                        foreach (var employee in supervisors)
-                            Console.WriteLine($"{employee.Name} {employee.Surname}: {employee.CalculateSalary()}$");
+                        foreach (var emp in supervisors)
+                            Console.WriteLine($"{emp.Name} {emp.Surname}: {emp.CalculateSalary()}$");
                         Console.WriteLine("Vendedores:");
-                        foreach (var employee in sellers)
-                            Console.WriteLine($"{employee.Name} {employee.Surname}: {employee.CalculateSalary()}$");
+                        foreach (var emp in sellers)
+                            Console.WriteLine($"{emp.Name} {emp.Surname}: {emp.CalculateSalary()}$");
                         break;
                     case "q":
                         break;
@@ -129,56 +140,43 @@ namespace TP_POO
 
         static void BetterPaid()
         {
-            Person employee = null;
-            if (sellers.Count() != 0)
+            IPerson employee = null;
+
+            try
             {
                 Console.WriteLine("El vendedor mejor renumerado es:");
-                foreach (var e in sellers)
-                {
-                    if (employee != null)
-                    {
-                        if (e.CalculateSalary() > employee.CalculateSalary())
-                            employee = e;
-                    }
-                    else
-                        employee = e;
-                }
+                employee = sellers.OrderByDescending(x => x.CalculateSalary()).First();
                 Console.WriteLine($"{employee.Name} {employee.Surname}: {employee.CalculateSalary()}$");
             }
-            else
+            catch (Exception)
+            {
                 Console.WriteLine("No existe ningún vendedor");
+            }
 
-            if (supervisors.Count() != 0)
+            try
             {
                 employee = null;
                 Console.WriteLine("El supervisor mejor renumerado es:");
-
-                foreach (var e in supervisors)
-                {
-                    if (employee != null)
-                    {
-                        if (e.CalculateSalary() > employee.CalculateSalary())
-                            employee = e;
-                    }
-                    else
-                        employee = e;
-                }
+                employee = supervisors.OrderByDescending(x => x.CalculateSalary()).First();
                 Console.WriteLine($"{employee.Name} {employee.Surname}: {employee.CalculateSalary()}$");
+
+
             }
-            else
+            catch (Exception)
+            {
                 Console.WriteLine("No existe ningún supervisor");
+            }
         }
 
         static T DataInput<T>(T employee)
-            where T : Person
+            where T : IPerson
         {
             Console.Write("Ingrese nombre: ");
             employee.Name = Console.ReadLine();
             Console.Write("Ingrese apellido: ");
             employee.Surname = Console.ReadLine();
             Console.Write("Ingrese DNI: ");
-            if (int.TryParse(Console.ReadLine(), out int doc))
-                employee.Identification = doc;
+            employee.Identification = Console.ReadLine();
             Console.Write("Ingrese año de ingreso: ");
             if (int.TryParse(Console.ReadLine(), out int year))
                 employee.EntryYear = year;
