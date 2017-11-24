@@ -10,14 +10,14 @@ namespace DataContextConsultas
     public class Consultas
     {
         //Listar todas las personas mostrando nombre, país y edad. 
-        public void MostrarTodos()
+        public List<PersonModel> MostrarTodos()
         {
-            var test = DataContext.People
+            var todos = DataContext.People
                 .Select(person => new PersonModel
                 {
                     Name = person.Name,
                     Country = person.Country,
-                    Age = DateTime.Today.Year - person.DateOfBorn.Year
+                    Age = person.Age()
                 })
                 .Union(DataContext.People
                 .Where(person => person.Children.Count() != 0)
@@ -26,18 +26,16 @@ namespace DataContextConsultas
                 {
                     Name = child.Name,
                     Country = child.Country,
-                    Age = DateTime.Today.Year - child.DateOfBorn.Year
-                }));
+                    Age = child.Age()
+                }))
+                .ToList();
 
-            foreach (var p in test)
-            {
-                Console.WriteLine($"Nombre: {p.Name}, Pais: {p.Country}, Edad: {p.Age}");
-            }
+            return todos;
 
         }
 
         //Listar las mujeres.
-        public void MostrarMujeres()
+        public List<PersonModel> MostrarMujeres()
         {
             var mujeres = DataContext.People
                             .Where(person => person.Gender == Gender.Feminine)
@@ -56,17 +54,16 @@ namespace DataContextConsultas
                                     Name = child.Name,
                                     Country = child.Country,
                                     Age = DateTime.Today.Year - child.DateOfBorn.Year
-                                }));
+                                }))
+                                .ToList();
 
 
-            foreach (var m in mujeres)
-            {
-                Console.WriteLine($"Nombre: {m.Name}, Pais: {m.Country}, Edad: {m.Age}");
-            }
+
+            return mujeres;
         }
 
         //Listar los hombres que pesen más de 70KG.
-        public void MostrarHombres70()
+        public List<PersonModel> MostrarHombres70()
         {
             var hombres70 = DataContext.People
                                 .Where(person => person.Gender == Gender.Masculine && person.Weight > 70)
@@ -88,26 +85,23 @@ namespace DataContextConsultas
                                         Age = DateTime.Today.Year - child.DateOfBorn.Year,
                                         Weight = child.Weight
                                     })
-                                 );
+                                 )
+                                 .ToList();
 
-
-            foreach (var h in hombres70)
-            {
-                Console.WriteLine($"Nombre: {h.Name}, Pais: {h.Country}, Edad: {h.Age}, Peso: {h.Weight}");
-            }
+            return hombres70;
         }
 
         //Promedio de edad de las personas de la lista, sin incluir a sus hijos.
-        public void PromedioEdadAdultos()
+        public double PromedioEdadAdultos()
         {
             var promedioEdad = DataContext.People
                 .Select(person => DateTime.Today.Year - person.DateOfBorn.Year)
                 .Average();
-
-            Console.WriteLine($"El promedio de edad es :{Math.Round(promedioEdad, 2)}");
+            
+            return promedioEdad;
         }
 
-        public void MostrarHijos()
+        public List<PersonModel> MostrarHijos()
         {
             var hijos = DataContext.People
                                     .Where(person => person.Children.Count() != 0)
@@ -117,53 +111,45 @@ namespace DataContextConsultas
                                         Name = child.Name,
                                         Country = child.Country,
                                         Age = DateTime.Today.Year - child.DateOfBorn.Year
-                                    });
+                                    })
+                                    .ToList();
 
-
-            foreach (var h in hijos)
-            {
-                Console.WriteLine($"Nombre: {h.Name}, Pais: {h.Country}, Edad: {h.Age}");
-            }
+            return hijos;
         }
 
         //Promedio de edad por país.
-        public void PromedioEdadPais()
+        public List<CountryAvg> PromedioEdadPais()
         {
-            var h = DataContext.People.GroupBy(x => x.Country)
-                .Select(x => new
+            var promedios = DataContext.People.GroupBy(x => x.Country)
+                .Select(x => new CountryAvg
                 {
                     Country = x.Key,
                     //Min = x.Select(y => DateTime.Today.Year - y.DateOfBorn.Year).Min(),
-                    avg = x.Select(y => DateTime.Today.Year - y.DateOfBorn.Year)
+                    Avg = x.Select(y => DateTime.Today.Year - y.DateOfBorn.Year)
                     .Average()
-                });
+                })
+                .ToList();
 
-            foreach (var item in h)
-            {
-                Console.WriteLine($"{item.Country}: {item.avg}");
-            }
+            return promedios;
         }
 
         //Promedio de peso por género. 
-        public void PromedioPesoGenero()
+        public List<GenderAvg> PromedioPesoGenero()
         {
-            var h = DataContext.People.GroupBy(x => x.Gender)
-                .Select(x => new
+            var promedios = DataContext.People.GroupBy(x => x.Gender)
+                .Select(x => new GenderAvg
                 {
-                    Gender = x.Key,
+                    Gender = x.Key.ToString(),
                     //Min = x.Select(y => DateTime.Today.Year - y.DateOfBorn.Year).Min(),
-                    avg = x.Select(y => y.Weight)
-                    .Average()
-                });
-
-            foreach (var item in h)
-            {
-                Console.WriteLine($"{item.Gender}: {item.avg}");
-            }
+                    Avg = x.Select(y => y.Weight).Average()
+                })
+                .ToList();
+            //falta agarrar a los pibes!!!!!!!!!
+            return promedios;
         }
 
         //Persona con mayor peso.
-        public void MayorPeso()
+        public PersonModel MayorPeso()
         {
             var mayorPeso = DataContext.People
                 .Select(p => new PersonModel
@@ -182,11 +168,11 @@ namespace DataContextConsultas
                 )
                 .OrderByDescending(x => x.Weight).FirstOrDefault();
 
-            Console.WriteLine($"{mayorPeso.Name}: {mayorPeso.Weight}");
+            return mayorPeso;
         }
 
         //Persona con menor peso.
-        public void MenorPeso()
+        public PersonModel MenorPeso()
         {
             var menorPeso = DataContext.People
                 .Select(p => new PersonModel
@@ -204,99 +190,95 @@ namespace DataContextConsultas
                 })
                 )
                 .OrderByDescending(x => x.Weight).LastOrDefault();
-
-            Console.WriteLine($"{menorPeso.Name}: {menorPeso.Weight}");
+            
+            return menorPeso;
         }
 
         //Última persona de la lista. 
-        public void UltimaPersona()
+        public string UltimaPersona()
         {
             var ultimo = DataContext.People
-                .Select(p => new PersonModel
-                {
-                    Name = p.Name
-                })
+                .Select(p => p.Name)
                 .LastOrDefault();
-
-            Console.WriteLine(ultimo.Name);
+            
+            return ultimo;
         }
 
         //Listar personas que hablan más de un idioma mostrando el nombre y los idiomas que habla. 
-        public void Bilingues()
+        public List<PersonModelLanguage> Multilingue()
         {
-            var bilingues = DataContext.People
+            var multilingue = DataContext.People
                 .Where(p => p.LanguagesThatSpeaks.Count() > 1)
-                .Select(p => new PersonModelLanguage {
+                .Select(p => new PersonModelLanguage
+                {
                     Name = p.Name,
-                    LanguagesThatSpeaks = p.LanguagesThatSpeaks
-                });
+                    LanguagesThatSpeaks = String.Join(", ", p.LanguagesThatSpeaks)
+                })
+                .ToList();
 
-            foreach (var person in bilingues)
-            {
-                Console.WriteLine($"{person.Name}: {String.Join(", ", person.LanguagesThatSpeaks)}");
-            }
+            return multilingue;
         }
 
         //Promedio de edad de los hijos de cada persona.
-        public void PromedioEdadHijos()
+        public List<ChildrenAgeAvg> PromedioEdadHijos()
         {
-            DataContext.People
+            var promedios = DataContext.People
                             .Where(p => p.Children.Any())
-                           .Select(c => new
+                           .Select(c => new ChildrenAgeAvg
                            {
-                               c.Name,
+                               Name = c.Name,
                                ChildrenAgeAverage = c.Children.Average(f => f.Age())
                            })
-                           .ToList()
-                           .ForEach(c => Console.WriteLine($"Padre: {c.Name}, Promedio edad hijos: {c.ChildrenAgeAverage}"));
+                           .ToList();
+           
+            return promedios;
+
         }
 
         //Consultar si existe alguna persona llamada “Osvaldo”.
-        public void Existe(string name)
+        public bool Existe(string name)
         {
-            var x = DataContext.People
+            var exist = DataContext.People
                 .Where(p => p.Name.Equals(name))
                 .Union(
                 DataContext.People
                 .Where(p => p.Children.Any())
                 .Where(c => c.Name.Equals(name))
-                );
+                )
+                .Any();
 
-            if (x.Any())
-                foreach (var c in x)
-                {
-                    Console.WriteLine($"{c.Name}, {c.Age()} años, {c.Country}");
-                }
-            else
-                Console.WriteLine("No existe!");
+            return exist;
         }
 
         //Ordenar las personas por edad y listar las personas en 3ra y 4ta posición.
-        public void TerceraYCuartaEdadAlta()
+        public List<PersonModel> TerceraYCuartaEdadAlta()
         {
             var t = DataContext.People
-                .Select(p => new {
+                .Select(p => new PersonModel
+                {
                     Name = p.Name,
                     Age = p.Age()
                 })
                 .Union(DataContext.People
                 .Where(p => p.Children.Any())
                 .SelectMany(p => p.Children)
-                .Select(c => new {
+                .Select(c => new PersonModel
+                {
                     Name = c.Name,
                     Age = c.Age()
                 })
                 )
                 .OrderByDescending(p => p.Age)
+                .Skip(2)
+                .Take(2)
                 .ToList();
 
-            Console.WriteLine($"{t.ElementAt(2).Name}: {t.ElementAt(2).Age}");
-            Console.WriteLine($"{t.ElementAt(3).Name}: {t.ElementAt(3).Age}");
+            return t;
         }
 
     }
 
-    class PersonModel
+    public class PersonModel
     {
         public string Name { get; set; }
         public string Country { get; set; }
@@ -305,15 +287,28 @@ namespace DataContextConsultas
 
     }
 
-    class PersonModelLanguage
+    public class PersonModelLanguage
     {
-        public PersonModelLanguage()
-        {
-            LanguagesThatSpeaks = new List<Language>();
-        }
-
         public string Name { get; set; }
-        public IEnumerable<Language> LanguagesThatSpeaks { get; set; }
+        public string LanguagesThatSpeaks { get; set; }
+    }
+
+    public class CountryAvg
+    {
+        public string Country { get; set; }
+        public double Avg { get; set; }
+    }
+
+    public class GenderAvg
+    {
+        public string Gender { get; set; }
+        public decimal Avg { get; set; }
+    }
+
+    public class ChildrenAgeAvg
+    {
+        public string Name { get; set; }
+        public double ChildrenAgeAverage { get; set; }
     }
 
     public static class PersonExtensions

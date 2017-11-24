@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5AB5F52B-5B7F-4787-B014-2C05578030B6}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>DataContextConsultas</RootNamespace>
-    <AssemblyName>DataContextConsultas</AssemblyName>
+    <ProjectGuid>{AEBA7B6D-8561-40F8-A57A-A9ACE9D8D960}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ConsoleApp</RootNamespace>
+    <AssemblyName>ConsoleApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -31,9 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,16 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Consultas.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataToTestLinq\DataToTestLinq.csproj">
-      <Project>{9841fd25-99ed-4bfa-8e0e-6ff5a72d75ce}</Project>
-      <Name>DataToTestLinq</Name>
+    <ProjectReference Include="..\DataContextConsultas\DataContextConsultas.csproj">
+      <Project>{5ab5f52b-5b7f-4787-b014-2c05578030b6}</Project>
+      <Name>DataContextConsultas</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
