@@ -16,7 +16,16 @@ namespace DataContextConsultas
             //x.MostrarHombres70();
             //x.PromedioEdadAdultos();
             //x.MostrarHijos();
-            x.PromedioEdadPais();
+            //x.PromedioEdadPais();
+            //x.PromedioPesoGenero();
+            //x.MayorPeso();
+            //x.MenorPeso();
+            //x.UltimaPersona();
+            //x.Bilingues();
+            //x.PromedioEdadHijos();
+            //x.Existe("Osvaldo");
+            x.TerceraYCuartaEdadAlta();
+
 
             Console.Read();
         }
