@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Business;
+using Business.Dtos;
 
 namespace ConsoleApp
 {
@@ -14,10 +15,12 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Clientes C.R.U.D:");
+
             var input = "";
             do
             {
+                Console.Clear();
+                Console.WriteLine("Clientes C.R.U.D:");
                 Console.WriteLine("C: Create, R: Read, U: Update, D: Delete, Q: Quit");
                 input = Console.ReadLine().ToLower();
                 switch (input)
@@ -43,7 +46,58 @@ namespace ConsoleApp
             } while (input != "q");
         }
 
-        static void CreateMenu() { }
+        static void CreateMenu()
+        {
+            var customer = new CustomerDto();
+            var customerId = "";
+            var customerCompany = "";
+
+            do
+            {
+                Console.Write("Ingrese ID, 5 letras max: ");
+                customerId = Console.ReadLine();
+            } while (customerId == "" || customerId.Length > 5);
+
+            customer.CustomerID = customerId;
+
+            Console.Write("Ingrese nombre de contacto: ");
+            customer.ContactName = Console.ReadLine();
+
+            Console.Write("Ingrese titulo de contacto: ");
+            customer.ContactName = Console.ReadLine();
+
+
+            do
+            {
+                Console.Write("Ingrese nombre de compania: ");
+                customerCompany = Console.ReadLine();
+            } while (customerCompany == "");
+
+            customer.CompanyName = customerCompany;
+
+            Console.Write("Ingrese dirección: ");
+            customer.Address = Console.ReadLine();
+
+            Console.Write("Ingrese ciudad: ");
+            customer.City = Console.ReadLine();
+
+            Console.Write("Ingrese región: ");
+            customer.Region = Console.ReadLine();
+
+            Console.Write("Ingrese codigo postal: ");
+            customer.PostalCode = Console.ReadLine();
+
+            Console.Write("Ingrese país: ");
+            customer.Country = Console.ReadLine();
+
+            Console.Write("Ingrese fax: ");
+            customer.Fax = Console.ReadLine();
+
+            service.AddNewCustomer(customer);
+
+            Console.WriteLine("Cliente creado con exito!");
+            Console.Read();
+        }
 
         static void ReadMenu()
         {
@@ -61,13 +115,30 @@ namespace ConsoleApp
                             Console.WriteLine($"ID: {c.CustomerID}");
                             Console.WriteLine($"Nombre:{c.ContactName}");
                             Console.WriteLine($"Compania: {c.CompanyName} ({c.ContactTitle})");
-                            Console.WriteLine($"{c.Address}, {c.City}({c.PostalCode}), {c.Country}");
+                            Console.WriteLine($"Dirección: {c.Address}, {c.City}({c.PostalCode}), {c.Country}");
                             Console.WriteLine($"Telefono: {c.Phone}, Fax: {c.Fax}");
                             Console.WriteLine();
                         }
+
+                        Console.Read();
                         return;
                     case "s":
-
+                        Console.Write("Ingrese ID del cliente: ");
+                        var id = Console.ReadLine();
+                        var customer = service.ReadCustomer(id);
+                        if (customer != null)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"ID: {customer.CustomerID}");
+                            Console.WriteLine($"Nombre:{customer.ContactName}");
+                            Console.WriteLine($"Compania: {customer.CompanyName} ({customer.ContactTitle})");
+                            Console.WriteLine($"Dirección: {customer.Address}, {customer.City}({customer.PostalCode}), {customer.Country}");
+                            Console.WriteLine($"Telefono: {customer.Phone}, Fax: {customer.Fax}");
+                        }
+                        else
+                            Console.WriteLine("No existe el cliente!");
+                        Console.WriteLine();
+                        Console.Read();
                         return;
                     case "q":
                         break;
@@ -76,13 +147,75 @@ namespace ConsoleApp
                         break;
                 }
             } while (input != "q");
-
         }
 
 
-        static void UpdateMenu() { }
+        static void UpdateMenu()
+        {
+            Console.Write("Ingrese ID del cliente a editar: ");
+            var id = Console.ReadLine();
+            var data = service.ReadCustomer(id);
 
-        static void DeleteMenu() { }
+            if (data != null)
+            {
+                var customer = new CustomerDto();
+                var customerCompany = "";
+
+                customer.CustomerID = data.CustomerID;
+
+                Console.Write("Ingrese nombre de contacto: ");
+                customer.ContactName = Console.ReadLine();
+
+                Console.Write("Ingrese titulo de contacto: ");
+                customer.ContactName = Console.ReadLine();
+
+
+                do
+                {
+                    Console.Write("Ingrese nombre de compania: ");
+                    customerCompany = Console.ReadLine();
+                } while (customerCompany == "");
+
+                customer.CompanyName = customerCompany;
+
+                Console.Write("Ingrese dirección: ");
+                customer.Address = Console.ReadLine();
+
+                Console.Write("Ingrese ciudad: ");
+                customer.City = Console.ReadLine();
+
+                Console.Write("Ingrese región: ");
+                customer.Region = Console.ReadLine();
+
+                Console.Write("Ingrese codigo postal: ");
+                customer.PostalCode = Console.ReadLine();
+
+                Console.Write("Ingrese país: ");
+                customer.Country = Console.ReadLine();
+
+                Console.Write("Ingrese fax: ");
+                customer.Fax = Console.ReadLine();
+
+                service.UpdateServiceCustomer(customer);
+
+                Console.WriteLine("Cliente creado con exito!");
+
+            }
+            else
+                Console.WriteLine("No existe el cliente!");
+            Console.Read();
+        }
+
+        static void DeleteMenu()
+        {
+            Console.Write("Ingrese ID del cliente a borrar: ");
+            var id = Console.ReadLine();
+
+            var result = service.DeleteServiceCustomer(id);
+
+            Console.WriteLine(result);
+            Console.Read();
+        }
 
     }
 }
